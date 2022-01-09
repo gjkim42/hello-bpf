@@ -1,0 +1,27 @@
+name: Continuous integration
+on:
+  pull_request:
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        sudo apt-get install -y make gcc libssl-dev bc libelf-dev libcap-dev \
+          clang gcc-multilib llvm libncurses5-dev git pkg-config libmnl-dev bison flex \
+          graphviz
+    - run: make
+
+  build-intermediate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        sudo apt-get install -y make gcc libssl-dev bc libelf-dev libcap-dev \
+          clang gcc-multilib llvm libncurses5-dev git pkg-config libmnl-dev bison flex \
+          graphviz
+    - run: make build-intermediate
