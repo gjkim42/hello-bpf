@@ -9,7 +9,8 @@ clean:
 
 build:
 	mkdir -p ${OUTPUT_DIR}
-	clang -O2 -Wall -target bpf -c xdp-example.c -o ${OUTPUT_DIR}/xdp-example.o
+	clang -O2 -Wall -target bpf -emit-llvm -c xdp-example.c -o ${OUTPUT_DIR}/xdp-example.bc
+	llc ${OUTPUT_DIR}/xdp-example.bc -march=bpf -mcpu=probe -filetype=obj -o ${OUTPUT_DIR}/xdp-example.o
 
 build-intermediate:
 	mkdir -p ${OUTPUT_DIR}
