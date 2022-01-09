@@ -1,4 +1,4 @@
-.PHONY: default clean build load unload
+.PHONY: default clean build build-intermediate load unload
 
 OUTPUT_DIR := _output
 
@@ -10,6 +10,11 @@ clean:
 build:
 	mkdir -p ${OUTPUT_DIR}
 	clang -O2 -Wall -target bpf -c xdp-example.c -o ${OUTPUT_DIR}/xdp-example.o
+
+build-intermediate:
+	mkdir -p ${OUTPUT_DIR}
+	clang -O2 -g -S -Wall -target bpf -c xdp-example.c -o ${OUTPUT_DIR}/xdp-example.S
+	llvm-mc -triple bpf -filetype=obj -o ${OUTPUT_DIR}/xdp-example.o ${OUTPUT_DIR}/xdp-example.S
 
 load:
 	sudo ip link set dev ${DEV} xdp obj ${OUTPUT_DIR}/xdp-example.o
